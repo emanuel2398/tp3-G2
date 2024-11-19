@@ -1,10 +1,4 @@
-# Back TFI "La tienda"
-
-Back para la realización del tfi requerido por la cátedra de Ingeniería del Software.
-
-## Estructura
-  
-  Contiene los controladores, repositorios, servicios y modelos necesarios para realizar la venta y CRUD de artículos
+# TP3
 
 ## Tecnologías
 
@@ -12,9 +6,11 @@ Back para la realización del tfi requerido por la cátedra de Ingeniería del S
 
 ## Integrantes
 
-  1. Albornoz Maria Agostina
-  2. Delevaux Matheus Gerard Paul
-  3. Gonza Gabriel Emanuel
-  4. Madrid Maria Paula
-  5. Torres Carrasco Gonzalo Guillermo
+46392	Albornoz María Agostina
+51562	Avellaneda María Emilia
+44624 	Gonza Gabriel Emanuel
+52494	Landivar Molinuevo Tristán
+48481	Monroy Norma Mikaela 
+49844    Vaca Daniel Agustin
+
 
