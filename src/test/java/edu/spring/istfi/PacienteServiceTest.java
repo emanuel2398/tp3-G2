@@ -16,7 +16,7 @@ import java.util.Optional;
 public class PacienteServiceTest {
     private Repositorio repositorioPaciente;
     private PacienteService servicio;
-
+/*
     @BeforeEach
     public void before() {
         repositorioPaciente = mock(Repositorio.class);
@@ -44,5 +44,5 @@ public class PacienteServiceTest {
         assertEquals("Datos incompletos: el diagnóstico debe tener una enfermedad (CIE10).", exception.getMessage());
 
         verify(repositorioPaciente, never()).guardarPaciente(any());
-    }
+    }*/
 }

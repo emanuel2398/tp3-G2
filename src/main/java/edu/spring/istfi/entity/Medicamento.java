@@ -5,65 +5,41 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Date;
-@Entity
 public class Medicamento {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMedicamento;
-
     private String nombreComercial;
     private String nombreGenerico;
     private String presentacion;
 
-    @OneToMany(mappedBy = "medicamento")
-    private List<RecetaDigital> recetasDigitales;
-
-
-    public Medicamento(Long idMedicamento, String nombreComercial, String nombreGenerico, String presentacion, List<RecetaDigital> recetasDigitales) {
+    public Medicamento(Long idMedicamento, String nombreComercial, String nombreGenerico, String presentacion) {
+        if (nombreComercial == null || nombreComercial.isEmpty()) {
+            throw new IllegalArgumentException("El nombre comercial no puede estar vacío.");
+        }
+        if (nombreGenerico == null || nombreGenerico.isEmpty()) {
+            throw new IllegalArgumentException("El nombre genérico no puede estar vacío.");
+        }
         this.idMedicamento = idMedicamento;
         this.nombreComercial = nombreComercial;
         this.nombreGenerico = nombreGenerico;
         this.presentacion = presentacion;
-        this.recetasDigitales = recetasDigitales;
+    }
+
+    public Medicamento() {
     }
 
     public Long getIdMedicamento() {
         return idMedicamento;
     }
 
-    public void setIdMedicamento(Long idMedicamento) {
-        this.idMedicamento = idMedicamento;
-    }
-
     public String getNombreComercial() {
         return nombreComercial;
-    }
-
-    public void setNombreComercial(String nombreComercial) {
-        this.nombreComercial = nombreComercial;
     }
 
     public String getNombreGenerico() {
         return nombreGenerico;
     }
 
-    public void setNombreGenerico(String nombreGenerico) {
-        this.nombreGenerico = nombreGenerico;
-    }
-
     public String getPresentacion() {
         return presentacion;
-    }
-
-    public void setPresentacion(String presentacion) {
-        this.presentacion = presentacion;
-    }
-
-    public List<RecetaDigital> getRecetasDigitales() {
-        return recetasDigitales;
-    }
-
-    public void setRecetasDigitales(List<RecetaDigital> recetasDigitales) {
-        this.recetasDigitales = recetasDigitales;
     }
 }

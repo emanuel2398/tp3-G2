@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-
 public abstract class Usuario extends Persona {
     private String username;
     private String password;

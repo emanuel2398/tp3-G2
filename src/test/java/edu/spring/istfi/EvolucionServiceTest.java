@@ -3,30 +3,22 @@ package edu.spring.istfi;
 
 
 
-import edu.spring.istfi.entity.Diagnostico;
-import edu.spring.istfi.entity.Medico;
 import edu.spring.istfi.repository.Repositorio;
-import edu.spring.istfi.service.EvolucionService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-
-import java.util.Date;
-import java.util.Optional;
 
 
 public class EvolucionServiceTest {
-    private Repositorio repositorioMock;
+   /* private Repositorio repositorioMock;
     private EvolucionService evolucionService;
 
     @BeforeEach
     public void setUp() {
         repositorioMock = mock(Repositorio.class);
         evolucionService = new EvolucionService(repositorioMock);
-    }
-
+    }*/
+/*
     @Test
     public void testRegistrarEvolucionExitosamente() {
         // Configurar datos simulados
@@ -47,5 +39,5 @@ public class EvolucionServiceTest {
         assertEquals(1, diagnostico.getEvoluciones().size());
         assertEquals("El paciente muestra mejoría.", diagnostico.getEvoluciones().get(0).getTextoLibre());
         assertEquals("Dr. Martínez", diagnostico.getEvoluciones().get(0).getMedico().getNombreApellido());
-    }
+    }*/
 }

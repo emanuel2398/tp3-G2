@@ -7,53 +7,35 @@ import java.util.*;
 
 
 public class Diagnostico {
-
+    private Long id;
     private String enfermedad;
-    private String descripcion;
-    private Date fechaDiagnostico;
-    private List<EvolucionClinica> evoluciones; // Relación con evoluciones clínicas
+    private String observaciones;
+    private List<EvolucionClinica> evoluciones;
 
-    public Diagnostico(String enfermedad, String descripcion, Date fechaDiagnostico) {
+    public Diagnostico(Long id, String enfermedad, String observaciones) {
+        this.id = id;
         this.enfermedad = enfermedad;
-        this.descripcion = descripcion;
-        this.fechaDiagnostico = fechaDiagnostico;
+        this.observaciones = observaciones;
         this.evoluciones = new ArrayList<>();
     }
 
-
-    public void agregarEvolucion(EvolucionClinica evolucion) {
-        if (evolucion == null) {
-            throw new IllegalArgumentException("La evolución clínica no puede ser nula.");
-        }
-        evoluciones.add(evolucion);
+    public Long getId() {
+        return id;
     }
-
-    public List<EvolucionClinica> getEvoluciones() {
-        return new ArrayList<>(evoluciones);
-    }
-
 
     public String getEnfermedad() {
         return enfermedad;
     }
 
-    public void setEnfermedad(String enfermedad) {
-        this.enfermedad = enfermedad;
+    public String getObservaciones() {
+        return observaciones;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public List<EvolucionClinica> getEvoluciones() {
+        return Collections.unmodifiableList(evoluciones);
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Date getFechaDiagnostico() {
-        return fechaDiagnostico;
-    }
-
-    public void setFechaDiagnostico(Date fechaDiagnostico) {
-        this.fechaDiagnostico = fechaDiagnostico;
+    public void agregarEvolucion(EvolucionClinica evolucion) {
+        evoluciones.add(evolucion);
     }
 }

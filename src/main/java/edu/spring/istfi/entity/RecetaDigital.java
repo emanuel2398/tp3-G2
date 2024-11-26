@@ -1,46 +1,27 @@
 package edu.spring.istfi.entity;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Date;
-@Entity
+import java.util.*;
+
 public class RecetaDigital {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Date fechaHora;
-    private String codigoBarras;
-    private String firmaElectronica;
-    private String logoEmpresa;
-    private String piePagina;
-    private String qr;
+    private List<Medicamento> medicamentos;
 
-    @ManyToOne
-    @JoinColumn(name = "medicamento_id")
-    private Medicamento medicamento;
-
-    // Getters y Setters
-
-
-    public RecetaDigital(Long id, Date fechaHora, String codigoBarras, String firmaElectronica, String logoEmpresa, String piePagina, String qr, Medicamento medicamento) {
+    public RecetaDigital(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("El ID debe ser un número positivo.");
+        }
         this.id = id;
-        this.fechaHora = fechaHora;
-        this.codigoBarras = codigoBarras;
-        this.firmaElectronica = firmaElectronica;
-        this.logoEmpresa = logoEmpresa;
-        this.piePagina = piePagina;
-        this.qr = qr;
-        this.medicamento = medicamento;
+        this.fechaHora = new Date();
+        this.medicamentos = new ArrayList<>();
+    }
+
+    public RecetaDigital() {
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Date getFechaHora() {
@@ -51,51 +32,30 @@ public class RecetaDigital {
         this.fechaHora = fechaHora;
     }
 
-    public String getCodigoBarras() {
-        return codigoBarras;
+    public void setMedicamentos(List<Medicamento> medicamentos) {
+        this.medicamentos = medicamentos;
     }
 
-    public void setCodigoBarras(String codigoBarras) {
-        this.codigoBarras = codigoBarras;
+    public List<Medicamento> getMedicamentos() {
+        return Collections.unmodifiableList(medicamentos);
     }
 
-    public String getFirmaElectronica() {
-        return firmaElectronica;
+    // Agregar un medicamento a la receta
+    public void agregarMedicamento(Medicamento medicamento) {
+        if (medicamento == null) {
+            throw new IllegalArgumentException("El medicamento no puede ser nulo.");
+        }
+        medicamentos.add(medicamento);
     }
 
-    public void setFirmaElectronica(String firmaElectronica) {
-        this.firmaElectronica = firmaElectronica;
-    }
-
-    public String getLogoEmpresa() {
-        return logoEmpresa;
-    }
-
-    public void setLogoEmpresa(String logoEmpresa) {
-        this.logoEmpresa = logoEmpresa;
-    }
-
-    public String getPiePagina() {
-        return piePagina;
-    }
-
-    public void setPiePagina(String piePagina) {
-        this.piePagina = piePagina;
-    }
-
-    public String getQr() {
-        return qr;
-    }
-
-    public void setQr(String qr) {
-        this.qr = qr;
-    }
-
-    public Medicamento getMedicamento() {
-        return medicamento;
-    }
-
-    public void setMedicamento(Medicamento medicamento) {
-        this.medicamento = medicamento;
+    // Opcional: Método para obtener información de todos los medicamentos
+    public String listarMedicamentos() {
+        StringBuilder sb = new StringBuilder();
+        for (Medicamento med : medicamentos) {
+            sb.append("ID: ").append(med.getIdMedicamento())
+                    .append(", Nombre: ").append(med.getNombreComercial())
+                    .append("\n");
+        }
+        return sb.toString();
     }
 }

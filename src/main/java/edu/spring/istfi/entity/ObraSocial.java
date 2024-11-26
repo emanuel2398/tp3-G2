@@ -8,14 +8,13 @@ import java.util.*;
 public class ObraSocial {
     private Long idObraSocial;
     private String nombreObraSocial;
-    private List<Paciente> pacientes;  // Lista de pacientes afiliados
+    private List<Paciente> pacientes;
 
-    // Constructor
+
     public ObraSocial(String nombreObraSocial) {
         this.nombreObraSocial = nombreObraSocial;
     }
 
-    // Getters y Setters
     public Long getIdObraSocial() {
         return idObraSocial;
     }
@@ -40,7 +39,6 @@ public class ObraSocial {
         this.pacientes = pacientes;
     }
 
-    // Método para agregar un paciente a la obra social
     public void agregarPaciente(Paciente paciente) {
         if (!this.pacientes.contains(paciente)) {
             this.pacientes.add(paciente);

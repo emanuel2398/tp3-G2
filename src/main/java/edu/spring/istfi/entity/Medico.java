@@ -6,9 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Date;
-@Entity
 
-public class Medico extends Usuario {
+public class Medico extends Persona {
     private String matricula;
     private String especialidad;
 
@@ -17,15 +16,9 @@ public class Medico extends Usuario {
 
     public Medico(String cuil, String dni, String nombreApellido, String email, String telefono, String direccion,
                   Date fechaDeNacimiento, String username, String password, String matricula, String especialidad) {
-        super(cuil, dni, nombreApellido, email, telefono, direccion, fechaDeNacimiento, username, password);
+        super(cuil, dni, nombreApellido, email, telefono, direccion, fechaDeNacimiento);
         this.matricula = matricula;
         this.especialidad = especialidad;
-    }
-
-
-    @Override
-    public String getRole() {
-        return "Medico";
     }
 
 
