@@ -88,4 +88,19 @@ public class PacienteController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+    @PostMapping("/{dni}/diagnosticos/{idDiagnostico}/evoluciones/pedidoLaboratorio")
+    public ResponseEntity<String> agregarEvolucionConPedido(
+            @PathVariable Long dni,
+            @PathVariable Long idDiagnostico,
+            @RequestBody Map<String, Object> request) {
+        try {
+            String texto = request.get("texto").toString();
+            Long dniMedico = Long.parseLong(request.get("dniMedico").toString());
+            String textoPedidoLaboratorio = request.get("textoPedidoLaboratorio").toString();
+            pacienteService.agregarEvolucionconPedido(dni, idDiagnostico, dniMedico, texto,textoPedidoLaboratorio);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Evolución con pedido de laboratorio agregada exitosamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

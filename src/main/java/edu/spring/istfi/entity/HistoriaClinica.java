@@ -36,6 +36,14 @@ public class HistoriaClinica {
         diagnostico.agregarEvolucion(texto, medico);
     }
 
+    public void agregarEvolucionADiagnosticoConPedido(Long idDiagnostico, String texto, Medico medico,String textoPedidoLaboratorio) {
+        Diagnostico diagnostico = diagnosticos.stream()
+                .filter(d -> d.getId().equals(idDiagnostico))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Diagnóstico no encontrado con ID: " + idDiagnostico));
+        diagnostico.agregarEvolucionConPedido(texto, medico,textoPedidoLaboratorio);
+    }
+
     public LocalDate getFechaCreado() {
         return fechaCreado;
     }

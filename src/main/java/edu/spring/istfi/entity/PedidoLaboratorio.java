@@ -3,12 +3,16 @@ package edu.spring.istfi.entity;
 import java.util.Date;
 
 public class PedidoLaboratorio {
+    private static Long contador = 0L;
     private Long id;
     private String texto;
 
-    public PedidoLaboratorio(Long id, String texto) {
-        this.id = id;
+    public PedidoLaboratorio(String texto) {
+        this.id = generarId();
         this.texto = texto;
+    }
+    private synchronized static Long generarId() {
+        return ++contador;
     }
 
     public Long getId() {

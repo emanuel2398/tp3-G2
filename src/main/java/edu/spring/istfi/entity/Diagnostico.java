@@ -41,4 +41,13 @@ public class Diagnostico {
 
         evoluciones.add(evolucion);
     }
+    public void agregarEvolucionConPedido(String texto, Medico medico, String textoPedidoLaboratorio) {
+
+        EvolucionClinica evolucion = new EvolucionClinica(texto, medico);
+        PedidoLaboratorio pedidoLaboratorio = new PedidoLaboratorio( textoPedidoLaboratorio);
+
+        evolucion.agregarPedido(pedidoLaboratorio);
+
+        evoluciones.add(evolucion);
+    }
 }

@@ -60,6 +60,16 @@ public class PacienteService {  private final Repositorio repositorio;
 
         paciente.agregarEvolucionADiagnostico(idDiagnostico, texto, medico);
     }
+
+    public void agregarEvolucionconPedido(Long dni, Long idDiagnostico, Long dniMedico, String texto,String textoPedidoLaboratorio) {
+        Paciente paciente = repositorio.buscarPacientePorDni(dni)
+                .orElseThrow(() -> new RuntimeException("Paciente con DNI " + dni + " no encontrado."));
+
+        Medico medico = repositorio.buscarMedicoPorDni(dniMedico)
+                .orElseThrow(() -> new RuntimeException("Médico con DNI " + dniMedico + " no encontrado."));
+
+        paciente.agregarEvolucionADiagnosticoConPedido(idDiagnostico, texto, medico,textoPedidoLaboratorio);
+    }
     public Medico buscarMedicoPorDni(Long dni) {
         return repositorio.buscarMedicoPorDni(dni)
                 .orElseThrow(() -> new RuntimeException("Médico con DNI " + dni + " no encontrado."));
