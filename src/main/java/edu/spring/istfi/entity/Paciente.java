@@ -42,8 +42,8 @@ public class Paciente {
         historiaClinica.agregarDiagnostico(diagnostico);
     }
 
-    public void agregarEvolucionADiagnostico(Long idDiagnostico, EvolucionClinica evolucion) {
-        historiaClinica.agregarEvolucionADiagnostico(idDiagnostico, evolucion);
+    public void agregarEvolucionADiagnostico(Long idDiagnostico, String texto, Medico medico) {
+        historiaClinica.agregarEvolucionADiagnostico(idDiagnostico, texto, medico);
     }
 
     public List<Diagnostico> obtenerDiagnosticos() {

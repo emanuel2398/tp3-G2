@@ -9,9 +9,6 @@ public class RecetaDigital {
     private List<Medicamento> medicamentos;
 
     public RecetaDigital(Long id) {
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException("El ID debe ser un número positivo.");
-        }
         this.id = id;
         this.fechaHora = new Date();
         this.medicamentos = new ArrayList<>();
@@ -40,7 +37,6 @@ public class RecetaDigital {
         return Collections.unmodifiableList(medicamentos);
     }
 
-    // Agregar un medicamento a la receta
     public void agregarMedicamento(Medicamento medicamento) {
         if (medicamento == null) {
             throw new IllegalArgumentException("El medicamento no puede ser nulo.");
@@ -48,14 +44,5 @@ public class RecetaDigital {
         medicamentos.add(medicamento);
     }
 
-    // Opcional: Método para obtener información de todos los medicamentos
-    public String listarMedicamentos() {
-        StringBuilder sb = new StringBuilder();
-        for (Medicamento med : medicamentos) {
-            sb.append("ID: ").append(med.getIdMedicamento())
-                    .append(", Nombre: ").append(med.getNombreComercial())
-                    .append("\n");
-        }
-        return sb.toString();
-    }
+
 }

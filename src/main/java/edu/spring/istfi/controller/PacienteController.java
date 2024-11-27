@@ -1,16 +1,14 @@
 package edu.spring.istfi.controller;
 
 
-import edu.spring.istfi.entity.DataInitializer;
-import edu.spring.istfi.entity.Diagnostico;
-import edu.spring.istfi.entity.EvolucionClinica;
-import edu.spring.istfi.entity.Paciente;
+import edu.spring.istfi.entity.*;
 import edu.spring.istfi.service.PacienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -18,19 +16,25 @@ import java.util.Optional;
 public class PacienteController {
     private final PacienteService pacienteService;
 
-    // Constructor para inyectar el servicio
     public PacienteController(PacienteService pacienteService) {
         this.pacienteService = pacienteService;
     }
+    @GetMapping("/medicos/{dni}")
+    public ResponseEntity<Medico> buscarMedicoPorDni(@PathVariable Long dni) {
+        try {
+            Medico medico = pacienteService.buscarMedicoPorDni(dni);
+            return ResponseEntity.ok(medico);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
-    // Obtener todos los pacientes
     @GetMapping
     public ResponseEntity<List<Paciente>> obtenerTodosLosPacientes() {
         List<Paciente> pacientes = pacienteService.obtenerTodosLosPacientes();
         return ResponseEntity.ok(pacientes);
     }
 
-    // Buscar paciente por DNI
     @GetMapping("/{dni}")
     public ResponseEntity<Paciente> buscarPacientePorDni(@PathVariable Long dni) {
         Optional<Paciente> paciente = pacienteService.buscarPacientePorDni(dni);
@@ -38,7 +42,6 @@ public class PacienteController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
-    // Crear un paciente
     @PostMapping
     public ResponseEntity<String> crearPaciente(@RequestBody Paciente nuevoPaciente) {
         try {
@@ -49,7 +52,6 @@ public class PacienteController {
         }
     }
 
-    // Obtener los diagnósticos de un paciente por DNI
     @GetMapping("/{dni}/diagnosticos")
     public ResponseEntity<List<Diagnostico>> obtenerDiagnosticosDePaciente(@PathVariable Long dni) {
         Optional<Paciente> paciente = pacienteService.buscarPacientePorDni(dni);
@@ -59,7 +61,7 @@ public class PacienteController {
         return ResponseEntity.ok(paciente.get().obtenerDiagnosticos());
     }
 
-    // Agregar un diagnóstico a un paciente
+    // Agregar un diagnóstico
     /*@PostMapping("/{dni}/diagnosticos")
     public ResponseEntity<String> agregarDiagnostico(@PathVariable Long dni, @RequestBody Diagnostico nuevoDiagnostico) {
         try {
@@ -70,14 +72,17 @@ public class PacienteController {
         }
     }*/
 
-    // Agregar evolución a un diagnóstico de un paciente
+    // Agregar evolución
     @PostMapping("/{dni}/diagnosticos/{idDiagnostico}/evoluciones")
     public ResponseEntity<String> agregarEvolucion(
             @PathVariable Long dni,
             @PathVariable Long idDiagnostico,
-            @RequestBody EvolucionClinica nuevaEvolucion) {
+            @RequestBody Map<String, Object> request) {
         try {
-            pacienteService.agregarEvolucion(dni, idDiagnostico, nuevaEvolucion);
+            Long dniMedico = Long.parseLong(request.get("dniMedico").toString());
+            String texto = request.get("texto").toString();
+
+            pacienteService.agregarEvolucion(dni, idDiagnostico, dniMedico, texto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Evolución agregada exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

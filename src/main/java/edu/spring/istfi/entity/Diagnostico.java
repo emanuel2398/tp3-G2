@@ -35,7 +35,10 @@ public class Diagnostico {
         return Collections.unmodifiableList(evoluciones);
     }
 
-    public void agregarEvolucion(EvolucionClinica evolucion) {
+
+    public void agregarEvolucion(String texto, Medico doctor) {
+        EvolucionClinica evolucion = new EvolucionClinica(texto, doctor);
+
         evoluciones.add(evolucion);
     }
 }

@@ -28,12 +28,12 @@ public class HistoriaClinica {
                 .filter(d -> d.getId().equals(idDiagnostico))
                 .findFirst();
     }
-    public void agregarEvolucionADiagnostico(Long idDiagnostico, EvolucionClinica evolucion) {
+    public void agregarEvolucionADiagnostico(Long idDiagnostico, String texto, Medico medico) {
         Diagnostico diagnostico = diagnosticos.stream()
                 .filter(d -> d.getId().equals(idDiagnostico))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Diagnóstico no encontrado con ID: " + idDiagnostico));
-        diagnostico.agregarEvolucion(evolucion);
+        diagnostico.agregarEvolucion(texto, medico);
     }
 
     public LocalDate getFechaCreado() {
