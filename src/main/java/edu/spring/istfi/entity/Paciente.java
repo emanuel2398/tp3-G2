@@ -2,10 +2,8 @@ package edu.spring.istfi.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Date;
+import java.util.*;
+
 public class Paciente {
     private Long dni;
     private String nombreApellido;
@@ -23,7 +21,11 @@ public class Paciente {
         return historiaClinica;
     }
 
-   /* public String getEstado() {
+    public void setHistoriaClinica(HistoriaClinica historiaClinica) {
+        this.historiaClinica = historiaClinica;
+    }
+
+/* public String getEstado() {
         return estado;
     }*/
 
@@ -46,7 +48,10 @@ public class Paciente {
         historiaClinica.agregarEvolucionADiagnostico(idDiagnostico, texto, medico);
     }
     public void agregarEvolucionADiagnosticoConPedido(Long idDiagnostico, String texto, Medico medico,String textoPedidoLaboratorio) {
-        historiaClinica.agregarEvolucionADiagnosticoConPedido(idDiagnostico, texto, medico,textoPedidoLaboratorio);
+        this.historiaClinica.agregarEvolucionADiagnosticoConPedido(idDiagnostico, texto, medico,textoPedidoLaboratorio);
+    }
+    public void agregarEvolucionADiagnosticoConReceta(Long idDiagnostico, String texto, Medico medico,String dosis,List<Map<String, String>>medicamentos) {
+        this.historiaClinica.agregarEvolucionADiagnosticoConReceta(idDiagnostico, texto, medico,dosis,medicamentos);
     }
 
     public List<Diagnostico> obtenerDiagnosticos() {

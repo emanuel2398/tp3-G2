@@ -79,10 +79,10 @@ public class PacienteController {
             @PathVariable Long idDiagnostico,
             @RequestBody Map<String, Object> request) {
         try {
-            Long dniMedico = Long.parseLong(request.get("dniMedico").toString());
-            String texto = request.get("texto").toString();
+            Long dniMedico = Long.parseLong(request.get("dniMedico").toString());//extraigo el dni de medico de json
+            String texto = request.get("texto").toString();//extraigo el texto del json
 
-            pacienteService.agregarEvolucion(dni, idDiagnostico, dniMedico, texto);
+            pacienteService.agregarEvolucion(dni, idDiagnostico, dniMedico, texto);// llamo al servicio paciente para agregar mi evolucion
             return ResponseEntity.status(HttpStatus.CREATED).body("Evolución agregada exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -98,6 +98,28 @@ public class PacienteController {
             Long dniMedico = Long.parseLong(request.get("dniMedico").toString());
             String textoPedidoLaboratorio = request.get("textoPedidoLaboratorio").toString();
             pacienteService.agregarEvolucionconPedido(dni, idDiagnostico, dniMedico, texto,textoPedidoLaboratorio);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Evolución con pedido de laboratorio agregada exitosamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{dni}/diagnosticos/{idDiagnostico}/evoluciones/receta")
+    public ResponseEntity<String> agregarEvolucionConReceta(
+            @PathVariable Long dni,
+            @PathVariable Long idDiagnostico,
+            @RequestBody Map<String, Object> request) {
+        try {
+            String texto = request.get("texto").toString();
+            Long dniMedico = Long.parseLong(request.get("dniMedico").toString());
+            String dosis = request.get("dosis").toString();  // Dosis común para todos los medicamentos
+
+            // Obtener la lista de medicamentos, donde cada uno es un objeto Medicamento
+            List<Map<String, String>> medicamentos =  (List<Map<String, String>>) request.get("medicamento");
+
+            // Procesamos la lógica de la evolución y el pedido de laboratorio
+            pacienteService.agregarEvolucionconReceta(dni, idDiagnostico, dniMedico, texto, dosis, medicamentos);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Evolución con pedido de laboratorio agregada exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

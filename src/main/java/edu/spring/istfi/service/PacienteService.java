@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 @Service
@@ -49,6 +50,10 @@ public class PacienteService {  private final Repositorio repositorio;
         Diagnostico diagnostico = new Diagnostico(idDiagnostico, enfermedad, descripcion);
         paciente.getHistoriaClinica().agregarDiagnostico(diagnostico);
     }
+    public Medico buscarMedicoPorDni(Long dni) {
+        return repositorio.buscarMedicoPorDni(dni)
+                .orElseThrow(() -> new RuntimeException("Médico con DNI " + dni + " no encontrado."));
+    }
 
     // Agregar evolución
     public void agregarEvolucion(Long dni, Long idDiagnostico, Long dniMedico, String texto) {
@@ -59,6 +64,7 @@ public class PacienteService {  private final Repositorio repositorio;
                 .orElseThrow(() -> new RuntimeException("Médico con DNI " + dniMedico + " no encontrado."));
 
         paciente.agregarEvolucionADiagnostico(idDiagnostico, texto, medico);
+        repositorio.actualizarPaciente(paciente);
     }
 
     public void agregarEvolucionconPedido(Long dni, Long idDiagnostico, Long dniMedico, String texto,String textoPedidoLaboratorio) {
@@ -69,10 +75,25 @@ public class PacienteService {  private final Repositorio repositorio;
                 .orElseThrow(() -> new RuntimeException("Médico con DNI " + dniMedico + " no encontrado."));
 
         paciente.agregarEvolucionADiagnosticoConPedido(idDiagnostico, texto, medico,textoPedidoLaboratorio);
+        repositorio.actualizarPaciente(paciente);
+
     }
-    public Medico buscarMedicoPorDni(Long dni) {
-        return repositorio.buscarMedicoPorDni(dni)
-                .orElseThrow(() -> new RuntimeException("Médico con DNI " + dni + " no encontrado."));
+    public void agregarEvolucionconReceta(Long dni, Long idDiagnostico, Long dniMedico, String texto, String dosis,List<Map<String, String>> medicamentos) {
+        // Buscar al paciente por DNI
+        Paciente paciente = repositorio.buscarPacientePorDni(dni)
+                .orElseThrow(() -> new RuntimeException("Paciente con DNI " + dni + " no encontrado."));
+
+        // Buscar al médico por DNI
+        Medico medico = repositorio.buscarMedicoPorDni(dniMedico)
+                .orElseThrow(() -> new RuntimeException("Médico con DNI " + dniMedico + " no encontrado."));
+
+        // Agregar evolución al diagnóstico del paciente, incluyendo la lista de medicamentos
+        paciente.agregarEvolucionADiagnosticoConReceta(idDiagnostico, texto, medico, dosis, medicamentos);
+
+        // Actualizar la información del paciente
+        repositorio.actualizarPaciente(paciente);
     }
+
+
 
 }

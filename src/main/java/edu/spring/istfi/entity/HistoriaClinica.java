@@ -23,25 +23,25 @@ public class HistoriaClinica {
         return diagnosticos;
     }
 
-    public Optional<Diagnostico> buscarDiagnosticoPorId(Long idDiagnostico) {
+    public Diagnostico buscarDiagnosticoPorId(Long idDiagnostico) {
         return diagnosticos.stream()
-                .filter(d -> d.getId().equals(idDiagnostico))
-                .findFirst();
-    }
-    public void agregarEvolucionADiagnostico(Long idDiagnostico, String texto, Medico medico) {
-        Diagnostico diagnostico = diagnosticos.stream()
                 .filter(d -> d.getId().equals(idDiagnostico))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Diagnóstico no encontrado con ID: " + idDiagnostico));
+    }
+    public void agregarEvolucionADiagnostico(Long idDiagnostico, String texto, Medico medico) {
+        Diagnostico diagnostico = buscarDiagnosticoPorId(idDiagnostico);
         diagnostico.agregarEvolucion(texto, medico);
     }
 
-    public void agregarEvolucionADiagnosticoConPedido(Long idDiagnostico, String texto, Medico medico,String textoPedidoLaboratorio) {
-        Diagnostico diagnostico = diagnosticos.stream()
-                .filter(d -> d.getId().equals(idDiagnostico))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Diagnóstico no encontrado con ID: " + idDiagnostico));
-        diagnostico.agregarEvolucionConPedido(texto, medico,textoPedidoLaboratorio);
+    public void agregarEvolucionADiagnosticoConPedido(Long idDiagnostico, String texto, Medico medico, String textoPedidoLaboratorio) {
+        Diagnostico diagnostico = buscarDiagnosticoPorId(idDiagnostico);
+        diagnostico.agregarEvolucionConPedido(texto, medico, textoPedidoLaboratorio);
+    }
+
+    public void agregarEvolucionADiagnosticoConReceta(Long idDiagnostico, String texto, Medico medico, String dosis, List<Map<String, String>> medicamentos) {
+        Diagnostico diagnostico = buscarDiagnosticoPorId(idDiagnostico);
+        diagnostico.agregarEvolucionConReceta(texto, medico, dosis, medicamentos);
     }
 
     public LocalDate getFechaCreado() {

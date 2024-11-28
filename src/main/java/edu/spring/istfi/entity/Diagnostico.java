@@ -50,4 +50,31 @@ public class Diagnostico {
 
         evoluciones.add(evolucion);
     }
+
+    public void agregarEvolucionConReceta(String texto, Medico medico, String dosis, List<Map<String, String>> medicamentosData) {
+        // Crear los objetos Medicamento a partir de los datos recibidos
+        List<Medicamento> medicamentos = new ArrayList<>();
+        for (Map<String, String> medicamentoData : medicamentosData) {
+            String nombreComercial = medicamentoData.get("nombreComercial");
+            String nombreGenerico = medicamentoData.get("nombreGenerico");
+
+            // Crear un objeto Medicamento y agregarlo a la lista
+            Medicamento medicamento = new Medicamento(nombreComercial, nombreGenerico);
+            medicamentos.add(medicamento);
+
+            // Verificar que el medicamento se crea correctamente
+            System.out.println("Medicamento creado: " + nombreComercial + " - " + nombreGenerico);
+        }
+
+        EvolucionClinica evolucion = new EvolucionClinica(texto, medico);
+
+        RecetaDigital receta = new RecetaDigital(dosis);
+        receta.agregarMedicamento(medicamentosData);
+
+        // Agregar la receta a la evolución clínica
+        evolucion.agregarReceta(receta);
+
+        // Agregar la evolución clínica a la lista de evoluciones
+        evoluciones.add(evolucion);
+    }
 }

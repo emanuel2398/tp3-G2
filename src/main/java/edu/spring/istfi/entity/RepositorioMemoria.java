@@ -16,7 +16,6 @@ public class RepositorioMemoria implements Repositorio {
         medicos = DataInitializer.inicializarMedicos();
         pacientes = DataInitializer.inicializarPacientes(medicos);
     }
-    //private List<Paciente> pacientes = new ArrayList<>();
     @Override
     public Optional<Paciente> buscarPacientePorDni(Long dni) {
         return pacientes.stream()

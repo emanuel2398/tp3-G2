@@ -4,17 +4,23 @@ import jakarta.persistence.*;
 import java.util.*;
 
 public class RecetaDigital {
+    private static Long contador = 0L;
     private Long id;
     private Date fechaHora;
+    private String dosis;
     private List<Medicamento> medicamentos;
 
-    public RecetaDigital(Long id) {
-        this.id = id;
+    public RecetaDigital(String dosis) {
+        this.id = generarId();
+        this.dosis=dosis;
         this.fechaHora = new Date();
         this.medicamentos = new ArrayList<>();
     }
 
     public RecetaDigital() {
+    }
+    private synchronized static Long generarId() {
+        return ++contador;
     }
 
     public Long getId() {
@@ -37,11 +43,18 @@ public class RecetaDigital {
         return Collections.unmodifiableList(medicamentos);
     }
 
-    public void agregarMedicamento(Medicamento medicamento) {
-        if (medicamento == null) {
-            throw new IllegalArgumentException("El medicamento no puede ser nulo.");
+    public void agregarMedicamento(List<Map<String, String>> medicamentosData) {
+        List<Medicamento> medi = new ArrayList<>();
+
+        for (Map<String, String> medicamentoData : medicamentosData) {
+            String nombreComercial = medicamentoData.get("nombreComercial");
+            String nombreGenerico = medicamentoData.get("nombreGenerico");
+            Medicamento medicamento = new Medicamento(nombreComercial, nombreGenerico);
+            medi.add(medicamento);
         }
-        medicamentos.add(medicamento);
+
+        // Agregar todos los medicamentos a la lista interna de la receta
+        medicamentos.addAll(medi);
     }
 
 
