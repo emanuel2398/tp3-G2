@@ -97,7 +97,7 @@ public class PacienteController {
             String texto = request.get("texto").toString();
             Long dniMedico = Long.parseLong(request.get("dniMedico").toString());
             String textoPedidoLaboratorio = request.get("textoPedidoLaboratorio").toString();
-            pacienteService.agregarEvolucionconPedido(dni, idDiagnostico, dniMedico, texto,textoPedidoLaboratorio);
+            pacienteService.agregarEvolucionConPedido(dni, idDiagnostico, dniMedico, texto,textoPedidoLaboratorio);
             return ResponseEntity.status(HttpStatus.CREATED).body("Evolución con pedido de laboratorio agregada exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -112,15 +112,13 @@ public class PacienteController {
         try {
             String texto = request.get("texto").toString();
             Long dniMedico = Long.parseLong(request.get("dniMedico").toString());
-            String dosis = request.get("dosis").toString();  // Dosis común para todos los medicamentos
+            String dosis = request.get("dosis").toString();
 
-            // Obtener la lista de medicamentos, donde cada uno es un objeto Medicamento
             List<Map<String, String>> medicamentos =  (List<Map<String, String>>) request.get("medicamento");
 
-            // Procesamos la lógica de la evolución y el pedido de laboratorio
-            pacienteService.agregarEvolucionconReceta(dni, idDiagnostico, dniMedico, texto, dosis, medicamentos);
+            pacienteService.agregarEvolucionConReceta(dni, idDiagnostico, dniMedico, texto, dosis, medicamentos);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Evolución con pedido de laboratorio agregada exitosamente.");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Evolución con receta agregada exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

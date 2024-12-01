@@ -8,13 +8,19 @@ public class Paciente {
     private Long dni;
     private String nombreApellido;
     private HistoriaClinica historiaClinica;
-    //private String estado;
+    private String direccion;
+    private String telefono;
+    private String email;
 
-    public Paciente(Long dni, String nombreApellido) {
+
+    public Paciente(Long dni, String nombreApellido,String direccion,String telefono,String email) {
         this.dni = dni;
         this.nombreApellido = nombreApellido;
         this.historiaClinica = new HistoriaClinica();
-     //   this.estado = "Activo";
+        this.direccion=direccion;
+        this.telefono=telefono;
+        this.email=email;
+
     }
 
     public HistoriaClinica getHistoriaClinica() {
@@ -25,13 +31,8 @@ public class Paciente {
         this.historiaClinica = historiaClinica;
     }
 
-/* public String getEstado() {
-        return estado;
-    }*/
 
-  /*  public void setEstado(String estado) {
-        this.estado = estado;
-    }*/
+
 
     public Long getDni() {
         return dni;
@@ -56,6 +57,30 @@ public class Paciente {
 
     public List<Diagnostico> obtenerDiagnosticos() {
         return this.historiaClinica.getDiagnosticos();
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
 
