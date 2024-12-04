@@ -44,6 +44,11 @@ public class RepositorioMemoria implements Repositorio {
     public List<Paciente> obtenerTodosLosPacientes() {
         return new ArrayList<>(pacientes);
     }
+    public Optional<Medico> buscarMedicoPorUsername(String username) {
+        return medicos.stream()
+                .filter(m -> m.getUsername().equals(username))
+                .findFirst();
+    }
 
 
 }

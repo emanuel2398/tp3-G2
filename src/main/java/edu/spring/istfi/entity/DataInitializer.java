@@ -34,8 +34,8 @@ public class DataInitializer {
 
     public static List<Medico> inicializarMedicos() {
         List<Medico> medicos = new ArrayList<>();
-        Medico medico1 = new Medico(87654323L, "Ana Martínez", "d56s4ad", "Medico Clinico");
-        Medico medico2 = new Medico(87654325L, "Carlos Gómez", "d56s5ad", "Cardiólogo");
+        Medico medico1 = new Medico(87654323L, "Ana Martínez", "d56s4ad", "Medico Clinico","medic1","123456");
+        Medico medico2 = new Medico(87654325L, "Carlos Gómez", "d56s5ad", "Cardiólogo","medic2","123456");
         medicos.add(medico1);
         medicos.add(medico2);
         return medicos;

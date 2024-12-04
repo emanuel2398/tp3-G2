@@ -46,7 +46,7 @@ public class PacienteService {  private final Repositorio repositorio;
             throw new RuntimeException("Datos incompletos: el diagnóstico debe tener una descripción.");
         }
 
-        Long idDiagnostico = idDiagnosticoCounter.getAndIncrement(); // Generar ID único
+        Long idDiagnostico = idDiagnosticoCounter.getAndIncrement();
         Diagnostico diagnostico = new Diagnostico(idDiagnostico, enfermedad, descripcion);
         paciente.getHistoriaClinica().agregarDiagnostico(diagnostico);
     }
@@ -80,7 +80,7 @@ public class PacienteService {  private final Repositorio repositorio;
         repositorio.actualizarPaciente(paciente);
     }
 
-    // Métodos auxiliares para evitar redundancia
+
     private Paciente obtenerPacientePorDni(Long dni) {
         return repositorio.buscarPacientePorDni(dni)
                 .orElseThrow(() -> new RuntimeException("Paciente con DNI " + dni + " no encontrado."));
