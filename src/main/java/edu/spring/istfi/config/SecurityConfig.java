@@ -24,15 +24,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll() // Permitir acceso sin autenticación
-                        .anyRequest().authenticated() // Proteger todos los demás endpoints
+                        .requestMatchers("/login").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .httpBasic(); // Usa autenticación básica para simplificar
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .httpBasic();
         return http.build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {

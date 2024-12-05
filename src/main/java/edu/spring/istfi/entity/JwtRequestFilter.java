@@ -15,7 +15,7 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;  // Utilidad para trabajar con JWT
     private final UserDetailsServiceImpl userDetailsService;
 
     public JwtRequestFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
@@ -26,21 +26,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-
         final String authorizationHeader = request.getHeader("Authorization");
+
         String username = null;
         String jwt = null;
 
-        // Extraer el token de la cabecera
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
-            username = jwtUtil.extraerUsername(jwt);
+            username = jwtUtil.extraerUsername(jwt);  // Extrae el username del token
         }
 
-        // Verificar que el username no sea nulo y que no esté autenticado
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userDetails = userDetailsService.loadUserByUsername(username);
-            if (jwtUtil.validarToken(jwt, username)) {
+            if (jwtUtil.validarToken(jwt, userDetails.getUsername())) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -50,5 +48,4 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         chain.doFilter(request, response);
     }
-
 }
