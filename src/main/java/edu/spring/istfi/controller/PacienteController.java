@@ -79,10 +79,10 @@ public class PacienteController {
             @PathVariable Long idDiagnostico,
             @RequestBody Map<String, Object> request) {
         try {
-            Long dniMedico = Long.parseLong(request.get("dniMedico").toString());//extraigo el dni de medico de json
-            String texto = request.get("texto").toString();//extraigo el texto del json
+            String usernameMedico = request.get("username").toString();
+            String texto = request.get("texto").toString();
 
-            pacienteService.agregarEvolucion(dni, idDiagnostico, dniMedico, texto);// llamo al servicio paciente para agregar mi evolucion
+            pacienteService.agregarEvolucion(dni, idDiagnostico, usernameMedico, texto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Evolución agregada exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -95,9 +95,9 @@ public class PacienteController {
             @RequestBody Map<String, Object> request) {
         try {
             String texto = request.get("texto").toString();
-            Long dniMedico = Long.parseLong(request.get("dniMedico").toString());
+            String usernameMedico = request.get("username").toString();
             String textoPedidoLaboratorio = request.get("textoPedidoLaboratorio").toString();
-            pacienteService.agregarEvolucionConPedido(dni, idDiagnostico, dniMedico, texto,textoPedidoLaboratorio);
+            pacienteService.agregarEvolucionConPedido(dni, idDiagnostico, usernameMedico, texto,textoPedidoLaboratorio);
             return ResponseEntity.status(HttpStatus.CREATED).body("Evolución con pedido de laboratorio agregada exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -111,12 +111,12 @@ public class PacienteController {
             @RequestBody Map<String, Object> request) {
         try {
             String texto = request.get("texto").toString();
-            Long dniMedico = Long.parseLong(request.get("dniMedico").toString());
+            String usernameMedico = request.get("username").toString();
             String dosis = request.get("dosis").toString();
 
             List<Map<String, String>> medicamentos =  (List<Map<String, String>>) request.get("medicamento");
 
-            pacienteService.agregarEvolucionConReceta(dni, idDiagnostico, dniMedico, texto, dosis, medicamentos);
+            pacienteService.agregarEvolucionConReceta(dni, idDiagnostico, usernameMedico, texto, dosis, medicamentos);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Evolución con receta agregada exitosamente.");
         } catch (RuntimeException e) {

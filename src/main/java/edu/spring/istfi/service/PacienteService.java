@@ -3,6 +3,8 @@ package edu.spring.istfi.service;
 import edu.spring.istfi.entity.*;
 import edu.spring.istfi.repository.Repositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -56,25 +58,25 @@ public class PacienteService {  private final Repositorio repositorio;
     }
 
     // Agregar evolución
-    public void agregarEvolucion(Long dni, Long idDiagnostico, Long dniMedico, String texto) {
+    public void agregarEvolucion(Long dni, Long idDiagnostico, String usernameMedico, String texto) {
         Paciente paciente = obtenerPacientePorDni(dni);
-        Medico medico = obtenerMedicoPorDni(dniMedico);
+        Medico medico = obetenerMedicoPorUsername(usernameMedico);
 
         paciente.agregarEvolucionADiagnostico(idDiagnostico, texto, medico);
         repositorio.actualizarPaciente(paciente);
     }
 
-    public void agregarEvolucionConPedido(Long dni, Long idDiagnostico, Long dniMedico, String texto, String textoPedidoLaboratorio) {
+    public void agregarEvolucionConPedido(Long dni, Long idDiagnostico, String usernameMedico, String texto, String textoPedidoLaboratorio) {
         Paciente paciente = obtenerPacientePorDni(dni);
-        Medico medico = obtenerMedicoPorDni(dniMedico);
+        Medico medico = obetenerMedicoPorUsername(usernameMedico);
 
         paciente.agregarEvolucionADiagnosticoConPedido(idDiagnostico, texto, medico, textoPedidoLaboratorio);
         repositorio.actualizarPaciente(paciente);
     }
 
-    public void agregarEvolucionConReceta(Long dni, Long idDiagnostico, Long dniMedico, String texto, String dosis, List<Map<String, String>> medicamentos) {
+    public void agregarEvolucionConReceta(Long dni, Long idDiagnostico, String usernameMedico, String texto, String dosis, List<Map<String, String>> medicamentos) {
         Paciente paciente = obtenerPacientePorDni(dni);
-        Medico medico = obtenerMedicoPorDni(dniMedico);
+        Medico medico = obetenerMedicoPorUsername(usernameMedico);
 
         paciente.agregarEvolucionADiagnosticoConReceta(idDiagnostico, texto, medico, dosis, medicamentos);
         repositorio.actualizarPaciente(paciente);
@@ -84,6 +86,11 @@ public class PacienteService {  private final Repositorio repositorio;
     private Paciente obtenerPacientePorDni(Long dni) {
         return repositorio.buscarPacientePorDni(dni)
                 .orElseThrow(() -> new RuntimeException("Paciente con DNI " + dni + " no encontrado."));
+    }
+
+    public Medico obetenerMedicoPorUsername(String username) throws UsernameNotFoundException {
+        return repositorio.buscarMedicoPorUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
     }
 
     private Medico obtenerMedicoPorDni(Long dniMedico) {

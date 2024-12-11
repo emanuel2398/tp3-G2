@@ -1,6 +1,5 @@
 package edu.spring.istfi.entity;
 
-import edu.spring.istfi.entity.Paciente;
 import edu.spring.istfi.repository.Repositorio;
 import org.springframework.stereotype.Repository;
 
@@ -44,6 +43,7 @@ public class RepositorioMemoria implements Repositorio {
     public List<Paciente> obtenerTodosLosPacientes() {
         return new ArrayList<>(pacientes);
     }
+    @Override
     public Optional<Medico> buscarMedicoPorUsername(String username) {
         return medicos.stream()
                 .filter(m -> m.getUsername().equals(username))
