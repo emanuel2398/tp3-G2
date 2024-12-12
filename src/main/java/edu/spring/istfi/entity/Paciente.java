@@ -12,14 +12,17 @@ public class Paciente {
     private String telefono;
     private String email;
 
+    private ObraSocial obraSocial;
 
-    public Paciente(Long dni, String nombreApellido,String direccion,String telefono,String email) {
+
+    public Paciente(Long dni, String nombreApellido,String direccion,String telefono,String email,ObraSocial obraSocial) {
         this.dni = dni;
         this.nombreApellido = nombreApellido;
         this.historiaClinica = new HistoriaClinica();
         this.direccion=direccion;
         this.telefono=telefono;
         this.email=email;
+        this.obraSocial=obraSocial;
 
     }
 
@@ -81,6 +84,10 @@ public class Paciente {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public ObraSocial getObraSocial() {
+        return obraSocial;
     }
 }
 

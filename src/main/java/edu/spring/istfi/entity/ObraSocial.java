@@ -6,14 +6,20 @@ import java.util.*;
 
 
 public class ObraSocial {
+    private static Long contador = 0L;
     private Long idObraSocial;
     private String nombreObraSocial;
-    private List<Paciente> pacientes;
+    //private List<Paciente> pacientes;
 
 
     public ObraSocial(String nombreObraSocial) {
+        this.idObraSocial=generarId();
         this.nombreObraSocial = nombreObraSocial;
     }
+    private synchronized static Long generarId() {
+        return ++contador;
+    }
+
 
     public Long getIdObraSocial() {
         return idObraSocial;
@@ -31,7 +37,7 @@ public class ObraSocial {
         this.nombreObraSocial = nombreObraSocial;
     }
 
-    public List<Paciente> getPacientes() {
+    /*public List<Paciente> getPacientes() {
         return pacientes;
     }
 
@@ -43,5 +49,5 @@ public class ObraSocial {
         if (!this.pacientes.contains(paciente)) {
             this.pacientes.add(paciente);
         }
-    }
+    }*/
 }

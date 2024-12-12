@@ -31,8 +31,9 @@ public class PacienteServiceTest {
         MockitoAnnotations.openMocks(this);
 
         List<Medico> medicos = DataInitializer.inicializarMedicos();
-        
-        List<Paciente> pacientes = DataInitializer.inicializarPacientes(medicos);
+        List<ObraSocial> obraSociales = DataInitializer.inicializarObrasSociales();
+
+        List<Paciente> pacientes = DataInitializer.inicializarPacientes(medicos,obraSociales);
 
         // Asumimos que estamos trabajando con el primer paciente
         paciente = pacientes.get(0); // Juan Pérez

@@ -10,10 +10,12 @@ import java.util.Optional;
 public class RepositorioMemoria implements Repositorio {
     private List<Paciente> pacientes;
     private List<Medico> medicos;
+    private List<ObraSocial> obraSociales;
 
     public RepositorioMemoria() {
         medicos = DataInitializer.inicializarMedicos();
-        pacientes = DataInitializer.inicializarPacientes(medicos);
+        obraSociales=DataInitializer.inicializarObrasSociales();
+        pacientes = DataInitializer.inicializarPacientes(medicos,obraSociales);
     }
     @Override
     public Optional<Paciente> buscarPacientePorDni(Long dni) {

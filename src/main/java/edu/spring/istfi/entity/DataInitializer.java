@@ -5,12 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataInitializer {
-   public static List<Paciente> inicializarPacientes(List<Medico> medicos) {
+    public static List<ObraSocial> inicializarObrasSociales() {
+        List<ObraSocial> obrasSociales = new ArrayList<>();
+        obrasSociales.add(new ObraSocial("OSDE"));
+        obrasSociales.add(new ObraSocial("Swiss Medical"));
+        obrasSociales.add(new ObraSocial("Galeno"));
+        obrasSociales.add(new ObraSocial("Medife"));
+        return obrasSociales;
+    }
+   public static List<Paciente> inicializarPacientes(List<Medico> medicos, List<ObraSocial> obrasSociales) {
        List<Paciente> pacientes = new ArrayList<>();
+       ObraSocial obraSocial1 = obrasSociales.get(0); // OSDE
+       ObraSocial obraSocial2 = obrasSociales.get(1); // Swiss Medical
 
-       Paciente paciente1 = new Paciente(12345678L, "Juan Pérez", "Rivadavia 1050","3886529722","juanperez@gmail.com");
-       Paciente paciente2 = new Paciente(87654321L, "María López","España 1400","3863512902","marialopez@gmail.com");
-
+       Paciente paciente1 = new Paciente(12345678L, "Juan Pérez", "Rivadavia 1050", "3886529722", "juanperez@gmail.com", obraSocial1);
+       Paciente paciente2 = new Paciente(87654321L, "María López", "España 1400", "3863512902", "marialopez@gmail.com", obraSocial2);
        Diagnostico diagnostico1 = new Diagnostico(1L, "Gripe", "Fiebre y malestar general");
        Diagnostico diagnostico2 = new Diagnostico(2L, "Hipertensión", "Presión arterial elevada");
 
