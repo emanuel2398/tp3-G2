@@ -27,27 +27,6 @@ public class SecurityConfig {
     public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
-/*metodo para bloquear endpoints*/
-    /*@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
-        http.csrf().disable()
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic();
-        return http.build();
-    }*/
-/*@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf().disable()
-            .authorizeHttpRequests(auth -> auth
-                    .anyRequest().permitAll()
-            )
-            .httpBasic().disable();
-    return http.build();
-}*/
 
 
 

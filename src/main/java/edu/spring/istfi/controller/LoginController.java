@@ -1,5 +1,6 @@
 package edu.spring.istfi.controller;
 
+import edu.spring.istfi.config.TokenBlacklist;
 import edu.spring.istfi.entity.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,12 @@ public class LoginController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    public LoginController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    private final TokenBlacklist tokenBlacklist;
+
+    public LoginController(AuthenticationManager authenticationManager, JwtUtil jwtUtil,TokenBlacklist tokenBlacklist) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.tokenBlacklist=tokenBlacklist;
     }
 
     @PostMapping
@@ -40,6 +44,17 @@ public class LoginController {
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
         }
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody Map<String, String> credentials) {
+        String token = credentials.get("token");
+        if (token == null || !token.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().body("Token no proporcionado");
+        }
+
+        tokenBlacklist.blacklistToken(token.substring(7)); // Eliminar "Bearer "
+
+        return ResponseEntity.ok("Logout exitoso");
     }
 
 }
