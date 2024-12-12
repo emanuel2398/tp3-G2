@@ -36,7 +36,7 @@ public class PacienteService {  private final Repositorio repositorio;
         repositorio.guardarPaciente(nuevoPaciente);
     }
 
-    public void agregarDiagnostico(Long dni, String enfermedad, String descripcion) {
+    public void agregarDiagnostico(Long dni, String enfermedad, String observaciones) {
         Paciente paciente = repositorio.buscarPacientePorDni(dni)
                 .orElseThrow(() -> new RuntimeException("Paciente con DNI " + dni + " no encontrado."));
 
@@ -44,13 +44,9 @@ public class PacienteService {  private final Repositorio repositorio;
             throw new RuntimeException("Datos incompletos: el diagnóstico debe tener una enfermedad.");
         }
 
-        if (descripcion == null || descripcion.isEmpty()) {
-            throw new RuntimeException("Datos incompletos: el diagnóstico debe tener una descripción.");
-        }
 
-        Long idDiagnostico = idDiagnosticoCounter.getAndIncrement();
-        Diagnostico diagnostico = new Diagnostico(idDiagnostico, enfermedad, descripcion);
-        paciente.getHistoriaClinica().agregarDiagnostico(diagnostico);
+        Diagnostico diagnostico = new Diagnostico(enfermedad, observaciones);
+        paciente.agregarDiagnostico(diagnostico);
     }
     public Medico buscarMedicoPorDni(Long dni) {
         return repositorio.buscarMedicoPorDni(dni)

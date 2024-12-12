@@ -61,18 +61,19 @@ public class PacienteController {
         return ResponseEntity.ok(paciente.get().obtenerDiagnosticos());
     }
 
-    // Agregar un diagnóstico
-    /*@PostMapping("/{dni}/diagnosticos")
-    public ResponseEntity<String> agregarDiagnostico(@PathVariable Long dni, @RequestBody Diagnostico nuevoDiagnostico) {
+
+    @PostMapping("/{dni}/nuevodiagnostico")
+    public ResponseEntity<String> agregarDiagnostico(@PathVariable Long dni, @RequestBody Map<String, Object> request) {
         try {
-            pacienteService.agregarDiagnostico(dni, nuevoDiagnostico.getEnfermedad(), nuevoDiagnostico.getDescripcion());
+            String observaciones = request.get("observaciones").toString();
+            String enfermedad = request.get("enfermedad").toString();
+            pacienteService.agregarDiagnostico(dni, enfermedad, observaciones);
             return ResponseEntity.status(HttpStatus.CREATED).body("Diagnóstico agregado exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-    }*/
+    }
 
-    // Agregar evolución
     @PostMapping("/{dni}/diagnosticos/{idDiagnostico}/evoluciones")
     public ResponseEntity<String> agregarEvolucion(
             @PathVariable Long dni,
