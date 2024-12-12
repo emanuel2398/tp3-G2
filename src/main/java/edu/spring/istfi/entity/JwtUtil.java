@@ -15,13 +15,13 @@ import javax.crypto.SecretKey;
 @Component
 public class JwtUtil {
 
-    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("claveSecretaParaJWTDe256bitsPorFavorCambiar".getBytes(StandardCharsets.UTF_8));
+    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("Zm9vYmFyYmF6Y29vbGZvb2JhcmJhc2MZm9vYmFyYmF6Y29vbGZvb2JhcmJhc2M".getBytes(StandardCharsets.UTF_8));
 
     public String generarToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) 
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }

@@ -7,16 +7,20 @@ import java.util.*;
 
 
 public class Diagnostico {
+    private static Long contador = 0L;
     private Long id;
     private String enfermedad;
     private String observaciones;
     private List<EvolucionClinica> evoluciones;
 
     public Diagnostico(Long id, String enfermedad, String observaciones) {
-        this.id = id;
+        this.id = generarId();
         this.enfermedad = enfermedad;
         this.observaciones = observaciones;
         this.evoluciones = new ArrayList<>();
+    }
+    private synchronized static Long generarId() {
+        return ++contador;
     }
 
     public Long getId() {

@@ -7,13 +7,24 @@ import java.util.*;
 
 
 public class HistoriaClinica {
+    private static Long contador = 0L;
+    private Long id;
     private LocalDate fechaCreado;
     private List<Diagnostico> diagnosticos;
 
     public HistoriaClinica() {
+        this.id=generarId();
         this.fechaCreado = LocalDate.now();
         this.diagnosticos = new ArrayList<>();
     }
+    private synchronized static Long generarId() {
+        return ++contador;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
 
     public void agregarDiagnostico(Diagnostico diagnostico) {
         this.diagnosticos.add(diagnostico);
