@@ -18,7 +18,6 @@ public class LoginController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
-
     private final TokenBlacklist tokenBlacklist;
 
     public LoginController(AuthenticationManager authenticationManager, JwtUtil jwtUtil,TokenBlacklist tokenBlacklist) {
@@ -26,7 +25,6 @@ public class LoginController {
         this.jwtUtil = jwtUtil;
         this.tokenBlacklist=tokenBlacklist;
     }
-
     @PostMapping
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
         try {
@@ -34,7 +32,7 @@ public class LoginController {
             String password = credentials.get("password");
 
             if (username == null || password == null) {
-                return ResponseEntity.badRequest().body("Faltan campos en la solicitud");
+                return ResponseEntity.badRequest().body("Faltan completar campos");
             }
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
@@ -51,7 +49,6 @@ public class LoginController {
         if (token == null || !token.startsWith("Bearer ")) {
             return ResponseEntity.badRequest().body("Token no proporcionado");
         }
-
         tokenBlacklist.blacklistToken(token.substring(7)); // Eliminar "Bearer "
 
         return ResponseEntity.ok("Logout exitoso");
