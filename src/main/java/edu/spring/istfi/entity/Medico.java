@@ -71,7 +71,7 @@ public class Medico implements UserDetails {
     }
 
     public void setPassword(String password) {
-        // Aplica el hash siempre que se asigne una nueva contraseña.
+        
         if (password != null && !password.isEmpty()) {
             this.password = passwordEncoder.encode(password);
         } else {

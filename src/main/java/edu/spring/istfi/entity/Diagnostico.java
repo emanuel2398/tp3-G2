@@ -40,8 +40,8 @@ public class Diagnostico {
     }
 
 
-    public void agregarEvolucion(String texto, Medico doctor) {
-        EvolucionClinica evolucion = new EvolucionClinica(texto, doctor);
+    public void agregarEvolucion(String texto, Medico medico) {
+        EvolucionClinica evolucion = new EvolucionClinica(texto, medico);
 
         evoluciones.add(evolucion);
     }

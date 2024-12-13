@@ -52,8 +52,6 @@ public class RecetaDigital {
             Medicamento medicamento = new Medicamento(nombreComercial, nombreGenerico);
             medi.add(medicamento);
         }
-
-        // Agregar todos los medicamentos a la lista interna de la receta
         medicamentos.addAll(medi);
     }
 
