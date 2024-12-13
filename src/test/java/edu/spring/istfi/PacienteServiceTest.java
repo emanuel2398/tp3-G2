@@ -14,62 +14,96 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class PacienteServiceTest {
     @Mock
     private Repositorio repositorio;
-
-    @InjectMocks
-    private PacienteService pacienteService;
-
+    @Mock
     private Paciente paciente;
+    @Mock
     private Medico medico;
+    @Mock
+    private Diagnostico diagnostico;
+    @Mock
+    private EvolucionClinica evolucion;
+
+    private PacienteService pacienteService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-
-        List<Medico> medicos = DataInitializer.inicializarMedicos();
-        List<ObraSocial> obraSociales = DataInitializer.inicializarObrasSociales();
-
-        List<Paciente> pacientes = DataInitializer.inicializarPacientes(medicos,obraSociales);
-
-        // Asumimos que estamos trabajando con el primer paciente
-        paciente = pacientes.get(0); // Juan Pérez
-        medico = medicos.get(0); // Ana Martínez
-
-        // Simular el comportamiento del repositorio
-        when(repositorio.buscarPacientePorDni(12345678L)).thenReturn(Optional.of(paciente));
-        when(repositorio.buscarMedicoPorUsername("medic1")).thenReturn(Optional.of(medico));
+        pacienteService = new PacienteService(repositorio);
     }
 
     @Test
     public void testAgregarEvolucion() {
-        String textoEvolucion = "Evolución positiva.";
-        Long idDiagnostico = 1L; // Asumimos que este ID ya existe en el paciente
-
-        pacienteService.agregarEvolucion(12345678L, idDiagnostico, "medic1", textoEvolucion);
-
-        // Verificar que se actualizó el paciente en el repositorio
-        verify(repositorio).actualizarPaciente(paciente);
-
-        // Verificar que la evolución se ha agregado correctamente
-        assertEquals(3, paciente.getHistoriaClinica().getDiagnosticos().get(0).getEvoluciones().size()); // 2 evoluciones previas + 1 nueva
-        assertEquals(textoEvolucion, paciente.getHistoriaClinica().getDiagnosticos().get(0).getEvoluciones().get(2).getTextoLibre());
-    }
-    //@Test
-    /*public void testAgregarEvolucionConPedido() {
-        String textoEvolucion = "Evolución con pedido.";
-        String textoPedido = "Pedido de laboratorio.";
+        Long dni = 123456L;
         Long idDiagnostico = 1L;
+        String usernameMedico = "medico1";
+        String textoEvolucion = "Mejoría notable en el paciente.";
 
-        pacienteService.agregarEvolucionConPedido(12345678L, idDiagnostico, "medic1", textoEvolucion, textoPedido);
+        when(repositorio.buscarPacientePorDni(dni)).thenReturn(Optional.of(paciente));
+        when(repositorio.buscarMedicoPorUsername(usernameMedico)).thenReturn(Optional.of(medico));
+        when(paciente.obtenerDiagnosticos()).thenReturn(List.of(diagnostico));
 
-        // Verificar que se actualizó el paciente en el repositorio
+        pacienteService.agregarEvolucion(dni, idDiagnostico, usernameMedico, textoEvolucion);
+
+        verify(paciente).agregarEvolucionADiagnostico(idDiagnostico, textoEvolucion, medico);
         verify(repositorio).actualizarPaciente(paciente);
+    }
 
-        // Verificar que la evolución con pedido se ha agregado correctamente (ajusta según tu implementación)
-        assertEquals(textoPedido, paciente.getHistoriaClinica().getDiagnosticos().get(0).getEvoluciones().getTextoPedido());
-    }*/
+    @Test
+    public void testAgregarEvolucionConPedido() {
+        Long dni = 123456L;
+        Long idDiagnostico = 1L;
+        String usernameMedico = "medico1";
+        String textoEvolucion = "Nuevo pedido de laboratorio.";
+        String textoPedido = "Pedido para análisis de sangre";
+
+        when(repositorio.buscarPacientePorDni(dni)).thenReturn(Optional.of(paciente));
+        when(repositorio.buscarMedicoPorUsername(usernameMedico)).thenReturn(Optional.of(medico));
+
+        pacienteService.agregarEvolucionConPedido(dni, idDiagnostico, usernameMedico, textoEvolucion, textoPedido);
+
+        verify(paciente).agregarEvolucionADiagnosticoConPedido(idDiagnostico, textoEvolucion, medico, textoPedido);
+        verify(repositorio).actualizarPaciente(paciente);
+    }
+
+    @Test
+    public void testAgregarEvolucionConReceta() {
+        Long dni = 123456L;
+        Long idDiagnostico = 1L;
+        String usernameMedico = "medico1";
+        String textoEvolucion = "Receta médica";
+        String dosis = "500mg";
+        List<Map<String, String>> medicamentos = List.of(Map.of("nombreComercial", "Paracetamol", "nombreGenerico", "Paracetamol"));
+
+        when(repositorio.buscarPacientePorDni(dni)).thenReturn(Optional.of(paciente));
+        when(repositorio.buscarMedicoPorUsername(usernameMedico)).thenReturn(Optional.of(medico));
+
+        pacienteService.agregarEvolucionConReceta(dni, idDiagnostico, usernameMedico, textoEvolucion, dosis, medicamentos);
+
+        verify(paciente).agregarEvolucionADiagnosticoConReceta(idDiagnostico, textoEvolucion, medico, dosis, medicamentos);
+        verify(repositorio).actualizarPaciente(paciente);
+    }
+
+    @Test
+    public void testPacienteNoEncontrado() {
+        Long dni = 123456L;
+        Long idDiagnostico = 1L;
+        String usernameMedico = "medico1";
+        String textoEvolucion = "Evolución de paciente no encontrado.";
+
+        when(repositorio.buscarPacientePorDni(dni)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            pacienteService.agregarEvolucion(dni, idDiagnostico, usernameMedico, textoEvolucion);
+        });
+
+        assertEquals("Paciente con DNI 123456 no encontrado.", exception.getMessage());
+    }
+
+
 }
