@@ -17,7 +17,7 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;  // Utilidad para trabajar con JWT
+    private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
 
     public JwtRequestFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
@@ -26,7 +26,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
     @Autowired
     private TokenBlacklist tokenBlacklist;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
