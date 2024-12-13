@@ -1,48 +1,109 @@
 package edu.spring.istfi;
-import edu.spring.istfi.entity.Diagnostico;
-import edu.spring.istfi.entity.EvolucionClinica;
-import edu.spring.istfi.entity.Paciente;
+import edu.spring.istfi.entity.*;
 
 import edu.spring.istfi.repository.Repositorio;
 import edu.spring.istfi.service.PacienteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class PacienteServiceTest {
-    private Repositorio repositorioPaciente;
-    private PacienteService servicio;
-/*
+    @Mock
+    private Repositorio repositorio;
+    @Mock
+    private Paciente paciente;
+    @Mock
+    private Medico medico;
+    @Mock
+    private Diagnostico diagnostico;
+    @Mock
+    private EvolucionClinica evolucion;
+
+    private PacienteService pacienteService;
+
     @BeforeEach
-    public void before() {
-        repositorioPaciente = mock(Repositorio.class);
-        servicio = new PacienteService(repositorioPaciente);
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        pacienteService = new PacienteService(repositorio);
     }
 
     @Test
-    public void testAgregarDiagnostico() {
-        Paciente paciente = new Paciente("12345678", "Juan Pérez");
-        when(repositorioPaciente.buscarPacientePorDni(12345678L)).thenReturn(Optional.of(paciente));
-        servicio.agregarDiagnostico(12345678L, "Dengue", "Fiebre alta y dolor de cabeza");
-        assertEquals(1, paciente.getHistoriaClinica().getDiagnosticos().size());
-        assertEquals("Dengue", paciente.getHistoriaClinica().getDiagnosticos().get(0).getEnfermedad());
-        verify(repositorioPaciente, never()).guardarPaciente(any());
+    public void testAgregarEvolucion() {
+        Long dni = 123456L;
+        Long idDiagnostico = 1L;
+        String usernameMedico = "medico1";
+        String textoEvolucion = "Mejoría notable en el paciente.";
+
+        when(repositorio.buscarPacientePorDni(dni)).thenReturn(Optional.of(paciente));
+        when(repositorio.buscarMedicoPorUsername(usernameMedico)).thenReturn(Optional.of(medico));
+        when(paciente.obtenerDiagnosticos()).thenReturn(List.of(diagnostico));
+
+        pacienteService.agregarEvolucion(dni, idDiagnostico, usernameMedico, textoEvolucion);
+
+        verify(paciente).agregarEvolucionADiagnostico(idDiagnostico, textoEvolucion, medico);
+        verify(repositorio).actualizarPaciente(paciente);
     }
 
     @Test
-    public void testAgregarDiagnosticoConEnfermedadVacia() {
-        Paciente paciente = new Paciente("12345678", "Juan Pérez");
-        when(repositorioPaciente.buscarPacientePorDni(12345678L)).thenReturn(Optional.of(paciente));
-        RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                servicio.agregarDiagnostico(12345678L, "", "Fiebre alta y dolor de cabeza")
-        );
+    public void testAgregarEvolucionConPedido() {
+        Long dni = 123456L;
+        Long idDiagnostico = 1L;
+        String usernameMedico = "medico1";
+        String textoEvolucion = "Nuevo pedido de laboratorio.";
+        String textoPedido = "Pedido para análisis de sangre";
 
-        assertEquals("Datos incompletos: el diagnóstico debe tener una enfermedad (CIE10).", exception.getMessage());
+        when(repositorio.buscarPacientePorDni(dni)).thenReturn(Optional.of(paciente));
+        when(repositorio.buscarMedicoPorUsername(usernameMedico)).thenReturn(Optional.of(medico));
 
-        verify(repositorioPaciente, never()).guardarPaciente(any());
-    }*/
+        pacienteService.agregarEvolucionConPedido(dni, idDiagnostico, usernameMedico, textoEvolucion, textoPedido);
+
+        verify(paciente).agregarEvolucionADiagnosticoConPedido(idDiagnostico, textoEvolucion, medico, textoPedido);
+        verify(repositorio).actualizarPaciente(paciente);
+    }
+
+    @Test
+    public void testAgregarEvolucionConReceta() {
+        Long dni = 123456L;
+        Long idDiagnostico = 1L;
+        String usernameMedico = "medico1";
+        String textoEvolucion = "Receta médica";
+        String dosis = "500mg";
+        List<Map<String, String>> medicamentos = List.of(Map.of("nombreComercial", "Paracetamol", "nombreGenerico", "Paracetamol"));
+
+        when(repositorio.buscarPacientePorDni(dni)).thenReturn(Optional.of(paciente));
+        when(repositorio.buscarMedicoPorUsername(usernameMedico)).thenReturn(Optional.of(medico));
+
+        pacienteService.agregarEvolucionConReceta(dni, idDiagnostico, usernameMedico, textoEvolucion, dosis, medicamentos);
+
+        verify(paciente).agregarEvolucionADiagnosticoConReceta(idDiagnostico, textoEvolucion, medico, dosis, medicamentos);
+        verify(repositorio).actualizarPaciente(paciente);
+    }
+
+    @Test
+    public void testPacienteNoEncontrado() {
+        Long dni = 123456L;
+        Long idDiagnostico = 1L;
+        String usernameMedico = "medico1";
+        String textoEvolucion = "Evolución de paciente no encontrado.";
+
+        when(repositorio.buscarPacientePorDni(dni)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            pacienteService.agregarEvolucion(dni, idDiagnostico, usernameMedico, textoEvolucion);
+        });
+
+        assertEquals("Paciente con DNI 123456 no encontrado.", exception.getMessage());
+    }
+
+
 }

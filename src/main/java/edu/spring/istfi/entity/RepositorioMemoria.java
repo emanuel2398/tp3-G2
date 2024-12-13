@@ -1,6 +1,5 @@
 package edu.spring.istfi.entity;
 
-import edu.spring.istfi.entity.Paciente;
 import edu.spring.istfi.repository.Repositorio;
 import org.springframework.stereotype.Repository;
 
@@ -11,10 +10,12 @@ import java.util.Optional;
 public class RepositorioMemoria implements Repositorio {
     private List<Paciente> pacientes;
     private List<Medico> medicos;
+    private List<ObraSocial> obraSociales;
 
     public RepositorioMemoria() {
         medicos = DataInitializer.inicializarMedicos();
-        pacientes = DataInitializer.inicializarPacientes(medicos);
+        obraSociales=DataInitializer.inicializarObrasSociales();
+        pacientes = DataInitializer.inicializarPacientes(medicos,obraSociales);
     }
     @Override
     public Optional<Paciente> buscarPacientePorDni(Long dni) {
@@ -43,6 +44,12 @@ public class RepositorioMemoria implements Repositorio {
     @Override
     public List<Paciente> obtenerTodosLosPacientes() {
         return new ArrayList<>(pacientes);
+    }
+    @Override
+    public Optional<Medico> buscarMedicoPorUsername(String username) {
+        return medicos.stream()
+                .filter(m -> m.getUsername().equals(username))
+                .findFirst();
     }
 
 

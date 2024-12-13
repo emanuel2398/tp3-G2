@@ -57,5 +57,7 @@ public class RecetaDigital {
         medicamentos.addAll(medi);
     }
 
-
+    public String getDosis() {
+        return dosis;
+    }
 }

@@ -17,4 +17,5 @@ public interface Repositorio {
     void guardarPaciente(Paciente paciente);
     void actualizarPaciente(Paciente paciente);
 
+    Optional<Medico> buscarMedicoPorUsername(String username);
 }
